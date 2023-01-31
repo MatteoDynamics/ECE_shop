@@ -8,7 +8,7 @@
 #define BRAND_COMPARE 2
 #define PRICE_COMPARE 3
 
-
+//*ADD SHOPPING CART , ADD TO CART, DELETE FROM CART, BUY ITEMS
 typedef struct ElectronicItem {
     char name[50];
     char brand[20];
@@ -23,6 +23,16 @@ typedef struct node
     struct node *prev; 
     ElectronicItem data;
 }node;
+
+typedef struct ShoppingCart
+{
+    ElectronicItem cart_slots[10];
+    int items;
+    int capacity;
+    
+}ShoppingCart;
+
+
 
 void free_list(node *lista) {
     if (lista == NULL) {
@@ -228,7 +238,6 @@ void sort_list(node **lista, int field) {
 
 void search_name(node *lista, char search[20])
 {
-    scanf("%s",search);
     node *current = get_first(lista);
     int i;
     to_lower(search);
@@ -243,19 +252,47 @@ void search_name(node *lista, char search[20])
         if (strstr(name_temp, search) != NULL || strstr(brand_temp, search) != NULL)
         {
             printf("found:  ");
-            printf("name: %-20s brand: %-20s model: %-20s price: %-5.2lf stock: %-5s\n", lista->data.name, lista->data.brand, lista->data.model, lista->data.price, lista->data.stock);
+            printf("name: %-20s brand: %-20s model: %-20s price: %-5.2lf stock: %-5s\n", current->data.name, current->data.brand, current->data.model, current->data.price, current->data.stock);
         }
         current = current->next;
     }
 }
 
+void init_shopping_cart(ShoppingCart *cart)
+{
+    cart->capacity = 10;
+    cart->items = 0;
+}
+
+void add_to_cart(ShoppingCart *cart, char *name, char *model, node ** lista)
+{
+    if(cart->capacity==cart->items)
+    {
+        printf("Cart is full!");
+        return;
+    }
+    strcpy(cart->items[cart->cart_slots].name, name);
+    strcpy(cart->items[cart->cart_slots].model, model);
+    cart->items++;
+}
+
 int main()
-{node *lista = NULL;ElectronicItem dane;char name[20];
+{node *lista = NULL;ElectronicItem dane;char name[20];ShoppingCart cart;
+
     read_from_csv(&lista);
    // print_list(lista);
     sort_list(&lista,NAME_COMPARE);
     printf("\n\n\n");
     print_list(lista);
+    scanf("%s",&name);
     search_name(lista,name);
+    init_shopping_cart(&cart);
+    add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);
+    for (int i = 0; i < cart.items; i++) 
+    {
+        printf("\n");
+        printf("Your Cart contains:\n");
+        printf("- %s %s\n", cart.cart_slots[i].name,cart.cart_slots[i].model);
+    }
  printf("siema");
 }
