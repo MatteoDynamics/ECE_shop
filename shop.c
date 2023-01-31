@@ -393,22 +393,7 @@ print_list(lista);
             //ADD to cart
             case 3:
             {
-                add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);
-                add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);
-                add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);
-                add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);
-                add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);
-                add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);
-                add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);
-                add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);
-                add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);
-                add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);
-                add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);
-                add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);
-                add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);
-
-    
-               
+                add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);               
             }break;
             
             //SHOW CARD
