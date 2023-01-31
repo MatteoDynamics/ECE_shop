@@ -29,6 +29,7 @@ typedef struct ShoppingCart
     ElectronicItem cart_slots[10];
     int items;
     int capacity;
+    float value;
     
 }ShoppingCart;
 
@@ -262,37 +263,175 @@ void init_shopping_cart(ShoppingCart *cart)
 {
     cart->capacity = 10;
     cart->items = 0;
+    cart->value = 5.25;
 }
 
-void add_to_cart(ShoppingCart *cart, char *name, char *model, node ** lista)
+void add_to_cart(ShoppingCart *cart, char *name, char *model, node **lista)
 {
     if(cart->capacity==cart->items)
     {
-        printf("Cart is full!");
+        printf("Cart is full! Max items in cart is 10!");
         return;
     }
-    strcpy(cart->items[cart->cart_slots].name, name);
-    strcpy(cart->items[cart->cart_slots].model, model);
+    strcpy(cart->cart_slots[cart->items].name, name);
+    strcpy(cart->cart_slots[cart->items].model, model);
     cart->items++;
 }
 
-int main()
-{node *lista = NULL;ElectronicItem dane;char name[20];ShoppingCart cart;
+void menu_main(int * choice)
+{
+    printf("\n1) SORT LIST\n2) SEARSCH\n 3) ADD TO CART\n 4) SHOW CART\n 5) BUY\n 6) QUIT\n");
+    while (1) {
+    printf("What do you want to do: ");
+    if (scanf("%d", &*choice) == 1) {
+      break;
+    } else {
+      printf("Invalid input, please try again.\n");
+      while (getchar() != '\n');
+    }
+  }
+}
 
-    read_from_csv(&lista);
-   // print_list(lista);
-    sort_list(&lista,NAME_COMPARE);
-    printf("\n\n\n");
-    print_list(lista);
-    scanf("%s",&name);
-    search_name(lista,name);
-    init_shopping_cart(&cart);
-    add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);
+void menu_sort(int * choice2)
+{
+    printf("Type what you want to do?\n");
+    printf("\n1)sort by name\n2)sort by brand\n3)sort by price\n");
+    while (1) {
+    printf("What do you want to do: ");
+    if (scanf("%d", &*choice2) == 1) {
+      break;
+    } else {
+      printf("Invalid input, please try again.\n");
+      while (getchar() != '\n');
+    }
+  }
+}
+
+void menu_find(int * choice3)
+{
+    printf("Type what you want to do?\n");
+    printf("\n1)find by name and name\n2)find by brand\n");
+    while (1) {
+    printf("what do you want to do: ");
+    if (scanf("%d", &*choice3) == 1) {
+      break;
+    } else {
+      printf("Invalid input, please try again.\n");
+      while (getchar() != '\n');
+    }
+  }
+}
+
+void show_shopping_cart(ShoppingCart cart, node * lista)
+{
+    printf("Your Cart contains:\n");
     for (int i = 0; i < cart.items; i++) 
     {
         printf("\n");
-        printf("Your Cart contains:\n");
         printf("- %s %s\n", cart.cart_slots[i].name,cart.cart_slots[i].model);
     }
- printf("siema");
+
+    printf("Value : %.2f $", cart.value);
+}
+
+int main()
+{node *lista = NULL;ElectronicItem dane;char name[20];ShoppingCart cart;int choice;int choice2;int choice3;char name_searsch[20];char brand_searsch[20];
+
+read_from_csv(&lista);
+init_shopping_cart(&cart);
+print_list(lista);
+    do
+    {
+        menu_main(&choice);
+        switch(choice)
+        {
+            //SORT
+            case 1:
+            {
+
+    menu_sort(&choice2);
+    switch(choice2)
+    {
+        case 1:
+        {
+            sort_list(&lista, NAME_COMPARE);
+            print_list(lista);
+        }break;
+        case 2:
+        {
+            sort_list(&lista, BRAND_COMPARE);
+            print_list(lista);
+        }break;
+        case 3:
+        {
+            sort_list(&lista, PRICE_COMPARE);
+            print_list(lista);
+        }break;
+
+    }
+    
+            }break;
+            //FIND
+            case 2:
+            {
+                menu_find(&choice3);
+                switch(choice3)
+                {
+                    case 1:
+                    printf("Enter name to search: \n");
+                scanf("%s", name_searsch);
+                    search_name(lista, name_searsch);
+                    break;
+                    case 2:
+                    printf("Enter brand to search: \n");
+                scanf("%s", brand_searsch);
+                        search_name(lista, brand_searsch);
+                    search_name(lista, brand_searsch);
+                }
+                
+            }break;
+            //ADD to cart
+            case 3:
+            {
+                add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);
+                add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);
+                add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);
+                add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);
+                add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);
+                add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);
+                add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);
+                add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);
+                add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);
+                add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);
+                add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);
+                add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);
+                add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);
+
+    
+               
+            }break;
+            
+            //SHOW CARD
+            case 4:
+            {
+                show_shopping_cart(cart, lista);
+            }break;
+            /**BUY
+             * @brief case 5
+             * {
+             *  
+             * }
+             * 
+             */
+            //Quitting;
+            case 6:
+            {
+                printf("QUITTING!");
+                clear_list(&lista);
+                printf("Free memory!");
+                return 0;
+            }
+        }
+    } while (choice<=6 && choice>=1);
+
 }
