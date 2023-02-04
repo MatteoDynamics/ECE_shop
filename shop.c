@@ -237,10 +237,10 @@ void sort_list(node **lista, int field) {
   } while (swapped);
 }
 
-void search_name(node *lista, char search[20])
+int search_name(node *lista, char search[20])
 {
     node *current = get_first(lista);
-    int i;
+    int found = 0;
     to_lower(search);
     while (current != NULL)
     {
@@ -252,29 +252,44 @@ void search_name(node *lista, char search[20])
         
         if (strstr(name_temp, search) != NULL || strstr(brand_temp, search) != NULL)
         {
+            found = 1;
             printf("found:  ");
             printf("name: %-20s brand: %-20s model: %-20s price: %-5.2lf stock: %-5s\n", current->data.name, current->data.brand, current->data.model, current->data.price, current->data.stock);
         }
         current = current->next;
     }
+    if (found==0)
+    {
+        printf("No name matching '%s' found.\n", search);
+        return 1;
+    }
 }
+
 
 void init_shopping_cart(ShoppingCart *cart)
 {
     cart->capacity = 10;
     cart->items = 0;
-    cart->value = 5.25;
+    cart->value = 0;
 }
 
-void add_to_cart(ShoppingCart *cart, char *name, char *model, node **lista)
+void add_to_cart(ShoppingCart *cart, char name[20], char brand[20], node *lista)
 {
     if(cart->capacity==cart->items)
     {
-        printf("Cart is full! Max items in cart is 10!");
+        printf("Cart is full! Max items in cart is 10!\n");
         return;
     }
+    
+    int check_found  = search_name(lista, name);
+    if (check_found==1)
+    {
+        printf("Couldn't add item - check name typed!\n");
+        return;
+    }
+    
     strcpy(cart->cart_slots[cart->items].name, name);
-    strcpy(cart->cart_slots[cart->items].model, model);
+    strcpy(cart->cart_slots[cart->items].brand, brand);
     cart->items++;
 }
 
@@ -335,7 +350,7 @@ void show_shopping_cart(ShoppingCart cart, node * lista)
 }
 
 int main()
-{node *lista = NULL;ElectronicItem dane;char name[20];ShoppingCart cart;int choice;int choice2;int choice3;char name_searsch[20];char brand_searsch[20];
+{node *lista = NULL;ElectronicItem dane;char name[20];ShoppingCart cart;int choice;int choice2;int choice3;char name_searsch[20];char brand_searsch[20]; char model_searsch[20];
 
 read_from_csv(&lista);
 init_shopping_cart(&cart);
@@ -393,7 +408,9 @@ print_list(lista);
             //ADD to cart
             case 3:
             {
-                add_to_cart(&cart, "Transistor", "2SC5200 ", &lista);               
+                scanf("%s", &name_searsch);
+                scanf("%s", &model_searsch);
+                add_to_cart(&cart, name_searsch, model_searsch, lista);               
             }break;
             
             //SHOW CARD
@@ -418,5 +435,7 @@ print_list(lista);
             }
         }
     } while (choice<=6 && choice>=1);
-
+clear_list(&lista);
+printf("Memory free!");
+printf("Bye!");
 }

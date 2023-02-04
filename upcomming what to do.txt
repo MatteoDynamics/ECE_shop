@@ -1,0 +1,9 @@
+Add id to track , and find items by id
+
+funkcja buy()
+{
+
+jak znajdziemy to pobieramy cene, wpisujemy ją do struct ceny
+po Shopping cardzie powinno przeiterowac funkcję znajdującą po id tyle razy ile jest itemów i dla każdego ze znalezionych zaktualizować stock, jeśli stock = 0 to error i return;
+
+}
