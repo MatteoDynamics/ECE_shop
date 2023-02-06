@@ -1,2 +1,2 @@
-
-            //SHOW CARD
+temp_id;
+    prin
