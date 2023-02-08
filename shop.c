@@ -44,12 +44,23 @@ void free_list(node *lista) {
     free(lista);
 }
 
+
+/**
+ * @brief DODAJE NODE DO LISTY
+ * 
+ * @param lista 
+ * @param dane 
+ * @return int 
+ */
+
+
 int add(node **lista, ElectronicItem dane)
 {   
     if (*lista == NULL) {
         *lista = malloc(sizeof(node));
         if( lista==NULL)
         {
+            free_list(*lista);
             return 1;
         }
         (*lista)->data = dane;
@@ -135,7 +146,7 @@ void read_from_csv(node **lista)
 }
 
 void print_list(node *lista) {
-  while (lista->prev != NULL) {
+  while (lista->prev != NULL && lista != NULL) {
     lista = lista->prev;
   }
   while (lista != NULL) {
@@ -146,7 +157,8 @@ void print_list(node *lista) {
 
 void swap(node *a, node *b)
 {
-    ElectronicItem temp = a->data;
+    ElectronicItem 
+    temp = a->data;
     a->data = b->data;
     b->data = temp;
 }
@@ -169,13 +181,14 @@ void sort_list(node **lista, int field) {
 
   node *current = *lista;
 
+
   while (current->prev != NULL) {
     current = current->prev;
   }
 
   int swapped;
-  node *ptr1;
-  node *lptr = NULL;
+  node *ptr1=NULL;
+  node *last_ptr = NULL;
 
   if (current == NULL)
     return;
@@ -185,17 +198,11 @@ void sort_list(node **lista, int field) {
     swapped = 0;
     ptr1 = current;
 
-    while (ptr1->next != lptr)
+    while (ptr1->next != NULL)
     {
         if (field == NAME_COMPARE) {
             char name1[20], name2[20];
-            if(strlen(ptr1->data.name)>=19) 
-                strncpy(name1, ptr1->data.name,19);
-            else
                 strcpy(name1, ptr1->data.name);
-            if(strlen(ptr1->next->data.name)>=19) 
-                strncpy(name2, ptr1->next->data.name,19);
-            else
                 strcpy(name2, ptr1->next->data.name);
             to_lower(name1);
             to_lower(name2);
@@ -206,13 +213,7 @@ void sort_list(node **lista, int field) {
             }
         } else if (field== BRAND_COMPARE) {
             char brand1[20], brand2[20];
-            if(strlen(ptr1->data.brand)>=19) 
-                strncpy(brand1, ptr1->data.brand,19);
-            else
                 strcpy(brand1, ptr1->data.brand);
-            if(strlen(ptr1->next->data.brand)>=19) 
-                strncpy(brand2, ptr1->next->data.brand,19);
-            else
                 strcpy(brand2, ptr1->next->data.brand);
             to_lower(brand1);
             to_lower(brand2);
@@ -235,7 +236,7 @@ void sort_list(node **lista, int field) {
 
         ptr1 = ptr1->next;
     }
-    lptr = ptr1;
+    last_ptr = ptr1;
   } while (swapped);
 }
 
@@ -268,10 +269,9 @@ int search_name(node *lista, char search[20])
 }
 
 
-int update_stock(node **lista, ShoppingCart cart)
+void update_stock(node **lista, ShoppingCart cart)
 {
     node *current = get_first(*lista);
-    printf("test1!\n");
     int temp_id;
     for (int i =0 ; i< cart.items; i++)
         {
